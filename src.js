@@ -11,22 +11,24 @@ var tick = 0
 function init(c){
     document.getElementById('graphic').width = w
     document.getElementById('graphic').height = h
-    c.fillRect(0,0,w,h);
-    setInterval(function(){
-        grid(c)
-    }, 90);
+    c.fillRect(0,0,w,h)
+    go(c)
 }
 
 function go(c){
-     setInterval(function(){
-        build(c,tick)
-    },4);
+    setInterval(function(){
+        grid(c)
+    },100);
 }
 
+var mv = 0
+document.getElementById('graphic').onclick = function(){
+    grid(c)
+}
 
 function build(c,t){
     c.fillStyle = 'black'
-    c.fillRect(0,0,w,h);
+    c.fillRect(0,0,w,h)
     
     for(var i=0; center > i;i++){
         var r = 0, g = 0, b = 0
@@ -38,22 +40,58 @@ function build(c,t){
         c.stroke()
     }
     
-    
     sn = sn + timer
     sl = sl + timer
     
     grid(c)
 }
 
-var mv = 0
 function grid(c){
-    
     c.beginPath()
-    c.fillRect(0,0,w,h);
+    c.fillRect(0,0,w,h)
     
     if(mv === 20){
         mv = 0
     }
+    
+    var space = 20
+    var gh = (h/(h/space))
+    var gw = (w/(w/space))
+    
+    c.strokeStyle= 'grey'
+    c.lineWidth = 0.5
+    
+    var start = 0
+    
+    //horizontal lines
+    var hn = 0
+    for(var i = 0; i < h/gh;i++){
+        ctx.moveTo(hn+mv+(w-h),start)
+        c.lineTo(h+(w-h),hn+mv)
+        hn=hn+gh
+    }
+    
+    //vertical lines
+    var wn = 0
+    for(var i = 0; i < w/gw;i++){
+        ctx.moveTo(start,wn-mv)
+        c.lineTo(wn-mv,h)
+        wn=wn+gw
+    }
+    
+    mv = mv +4
+    //draw
+    c.stroke()
+}
+
+document.getElementById('graphic').onmousedown = function(){
+    clearInterval()
+}
+
+var mvBall = 0
+function ball(c){
+    
+    c.beginPath()
     
     var space = 20
     var zh = h/4
@@ -61,53 +99,35 @@ function grid(c){
     var gh = (h/(h/space))
     var gw = (w/(w/space))
     
-    c.strokeStyle= 'grey'
-    
     var start = 0
     
     //horizontal lines
     var hn = 0
     for(var i = 0; i < h/gh;i++){
-        ctx.moveTo(hn+mv+(w-h),start);
-        c.lineTo(h+(w-h),hn+mv);
+        ctx.moveTo(hn+mv+(w-h),start)
+        c.lineTo(h+(w-h),hn+mv)
         hn=hn+gh
     }
-    
-  
-    
-    //vertical lines
-    var wn = 0
-    for(var i = 0; i < w/gw;i++){
-        ctx.moveTo(start,wn-mv);
-        c.lineTo(wn-mv,h);
-        wn=wn+gw
-    }
-
-    mv = mv+4
-    
-    
     //draw
     c.stroke()
 }
 
-
 //old functions
 function lineMove(){
-    c.beginPath();
+    c.beginPath()
     c.moveTo(w/2,h/2);
     c.lineTo(w/2 + Xcnt,h/4 + Ycnt);
     c.stroke()
     
-    
     if(h/4 + Ycnt > h/2){
-        Xcnt--;
+        Xcnt--
     }else{
-        Xcnt++;
+        Xcnt++
     }
     
     if(w/2 + Xcnt < w/2){
-        Ycnt--;
+        Ycnt--
     }else{
-        Ycnt++;
+        Ycnt++
     }
 }
